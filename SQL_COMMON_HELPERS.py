@@ -33,7 +33,7 @@ def doProcessColumnsNames(conn, table):
     return str(columnNames)
 
 def QueryBuilder(x,table):
-    hash = str("'" + (hashlib.md5(x.encode('utf-8')).hexdigest()) + "'")
+    hash = COMMON_HELPERS.hashMaker(x)
     query = str('INSERT INTO '+table+' VALUES(' + str(hash) + "," + str(
         x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(connect,table))
     return str(query)
@@ -46,7 +46,9 @@ def doCreateRecords(conn, table):
     next(iterRow)
     for x in iterRow:
         query = QueryBuilder(x,tableName)
+        print(query)
         cur.execute(query)
+        connect.commit()
 
 def doCreateTable(conn,table):
     cur = conn.cursor()
@@ -71,8 +73,8 @@ def engineStart():
     target = ['mainframes','servers','storage','desktops']
     for each in target:
         each = str(each)
-        #doSelectQuery(connect, each)
-        doCreateTable(connect,each)
+        doSelectQuery(connect, each)
+        #doCreateTable(connect,each)
         doCreateRecords(connect, each)
     connect.close()
 engineStart()

@@ -39,7 +39,6 @@ def QueryBuilder(x,table):
     print(query)
     return str(query)
 
-
 def doCreateRecords(conn, table):
     cur = conn.cursor()
     tableName = table

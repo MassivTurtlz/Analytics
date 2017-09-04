@@ -7,7 +7,7 @@ hostname = 'localhost'
 username = 'root'
 password = 'maximus'
 database = 'ANALYTICS'
-
+connect = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
 
 ## TEST QUERY
 
@@ -36,7 +36,6 @@ def QueryBuilder(x,table):
     hash = str("'" + (hashlib.md5(x.encode('utf-8')).hexdigest()) + "'")
     query = str('INSERT INTO '+table+' VALUES(' + str(hash) + "," + str(
         x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(connect,table))
-    print(query)
     return str(query)
 
 def doCreateRecords(conn, table):
@@ -49,14 +48,31 @@ def doCreateRecords(conn, table):
         query = QueryBuilder(x,tableName)
         cur.execute(query)
 
+def doCreateTable(conn,table):
+    cur = conn.cursor()
+    titleRow = "uid,"+COMMON_HELPERS.dataReaderCSV(table).splitlines()[0]
+    stringBuild = 'CREATE TABLE IF NOT EXISTS '+table+' ('
+    stringContent = ''
+    counter = 0
+    while counter < len(titleRow.split(',')):
+        data = titleRow.split(',')[counter]
+        if data == 'uid':
+            stringContent = stringContent + data + ' VARCHAR(255) PRIMARY KEY,'
+        elif data == 'COUNTER' or data == 'COUNT' or data == 'STRATEGIC_IMPORTANCE':
+            stringContent = stringContent + data + ' INT(255),'
+        else:
+            stringContent = stringContent +data+' VARCHAR(255),'
+        counter+=1
+    query = stringBuild+str(stringContent[:-1]+');')
+    cur.execute(query)
+    connect.commit()
 
-
-connect = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
-target = ['mainframes','servers']
-for each in target:
-    each = str(each)
-    doSelectQuery(connect, each)
-    doCreateRecords(connect, each)
-
-connect.commit()
-connect.close()
+def engineStart():
+    target = ['mainframes','servers','storage','desktops']
+    for each in target:
+        each = str(each)
+        #doSelectQuery(connect, each)
+        doCreateTable(connect,each)
+        doCreateRecords(connect, each)
+    connect.close()
+engineStart()

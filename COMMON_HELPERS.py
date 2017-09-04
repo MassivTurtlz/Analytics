@@ -8,6 +8,8 @@ def getExtension(file):
     return str(path).split('.')[1].replace("'","").replace("]","")
 
 
+## TODO: HANDLE CSV FILE FORMAT
+
 def dataReader(fileName):
     ext = str(getExtension(fileName))
     if ext == 'txt':

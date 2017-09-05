@@ -8,21 +8,32 @@ def getExtension(file):
     return str(path).split('.')[1].replace("'","").replace("]","")
 
 
-## TODO: HANDLE CSV FILE FORMAT
+## TODO: HANDLE CSV FILE FORMAT -- needs testing
 
 def dataReader(fileName):
     ext = str(getExtension(fileName))
     if ext == 'txt':
-        with open('data/'+fileName+"."+ext) as mainframes:
-            mainframes = mainframes.readlines()
+        with open('data/'+fileName+"."+ext) as file:
+            file = file.readlines()
             line = ''
-            for x in mainframes:
+            for x in file:
                 x = re.sub("[|]","','",x)
                 x = re.sub(r'\n',"'\n",x)
                 x = "'"+x
 
                 line = line+str(x)
             return line+"'"
+    if ext == 'csv':
+        with open('data/' + fileName + "." + ext) as file:
+            file = file.readlines()
+            line = ''
+            for x in file:
+                x = re.sub("[,]", "','", x)
+                x = re.sub(r'\n', "'\n", x)
+                x = "'" + x
+
+                line = line + str(x)
+            return line + "'"
 
 def dataReaderCSV(fileName):
     data = dataReader(fileName)

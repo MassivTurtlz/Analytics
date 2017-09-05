@@ -11,12 +11,11 @@ connect = MySQLdb.connect(host=hostname, user=username, passwd=password, db=data
 
 ## TEST QUERY
 
-def doSelectQuery(conn, table):
+def doSelectQuery(conn, table, query):
     cur = conn.cursor()
-    cur.execute('SELECT * FROM ' + table + ';');
-    for x in cur.fetchall():
-        print(x)
-
+    cur.execute(query + table + ';');
+    results = cur.fetchall()
+    return results
 
 def doProcessColumnsNames(conn, table):
     cur = conn.cursor()
@@ -46,7 +45,6 @@ def doCreateRecords(conn, table):
     next(iterRow)
     for x in iterRow:
         query = QueryBuilder(x,tableName)
-        print(query)
         cur.execute(query)
         connect.commit()
 
@@ -73,8 +71,8 @@ def engineStart():
     target = ['mainframes','servers','storage','desktops']
     for each in target:
         each = str(each)
-        doSelectQuery(connect, each)
-        #doCreateTable(connect,each)
+        #doSelectQuery(connect, each, 'SELECT * FROM ')  # PRINTS ALL TABLES MENTIONED IN TARGET VARIABLE
+        doCreateTable(connect,each)
         doCreateRecords(connect, each)
     connect.close()
-engineStart()
+#engineStart()

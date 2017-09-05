@@ -7,17 +7,27 @@ hostname = 'localhost'
 username = 'root'
 password = 'maximus'
 database = 'ANALYTICS'
-connect = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
 
+
+
+#TODO REFACTOR SO I DONT NEED TWO INSTANCES OF THIS VARIABLE
+# done but maybe i should look at closing some connections down when im not using them
+def reConnect():
+    connect = MySQLdb.connect(host=hostname, user=username, passwd=password, db=database)
+    return connect
+
+connect = reConnect()
 ## TEST QUERY
 
-def doSelectQuery(conn, table, query):
+def doSelectQuery(table, query):
+    conn = reConnect()
     cur = conn.cursor()
     cur.execute(query + table + ';');
     results = cur.fetchall()
     return results
 
-def doProcessColumnsNames(conn, table):
+def doProcessColumnsNames(table):
+    conn = reConnect()
     cur = conn.cursor()
     query = 'SELECT column_name FROM information_schema.columns WHERE  table_name = "'+table+'" AND table_schema = "'+database+'";'
     cur.execute(str(query))
@@ -37,7 +47,8 @@ def QueryBuilder(x,table):
         x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(connect,table))
     return str(query)
 
-def doCreateRecords(conn, table):
+def doCreateRecords(table):
+    conn = reConnect()
     cur = conn.cursor()
     tableName = table
     table = COMMON_HELPERS.dataReader(table)
@@ -48,7 +59,8 @@ def doCreateRecords(conn, table):
         cur.execute(query)
         connect.commit()
 
-def doCreateTable(conn,table):
+def doCreateTable(table):
+    conn = reConnect()
     cur = conn.cursor()
     titleRow = "uid,"+COMMON_HELPERS.dataReaderCSV(table).splitlines()[0]
     stringBuild = 'CREATE TABLE IF NOT EXISTS '+table+' ('
@@ -71,8 +83,8 @@ def engineStart():
     target = ['mainframes','servers','storage','desktops']
     for each in target:
         each = str(each)
-        #doSelectQuery(connect, each, 'SELECT * FROM ')  # PRINTS ALL TABLES MENTIONED IN TARGET VARIABLE
-        doCreateTable(connect,each)
-        doCreateRecords(connect, each)
+        #doSelectQuery(each, 'SELECT * FROM ')  # PRINTS ALL TABLES MENTIONED IN TARGET VARIABLE
+        doCreateTable(each)
+        doCreateRecords(each)
     connect.close()
 #engineStart()

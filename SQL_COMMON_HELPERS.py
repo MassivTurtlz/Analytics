@@ -47,9 +47,8 @@ def QueryBuilder(x,table):
         x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(table))
     return str(query)
 
-def doCreateRecords(table):
-    conn = reConnect()
-    cur = conn.cursor()
+def doCreateRecords(connect,table):
+    cur = connect.cursor()
     tableName = table
     table = COMMON_HELPERS.dataReader(table)
     iterRow = iter(table.splitlines())
@@ -80,10 +79,11 @@ def doCreateTable(table):
     connect.commit()
 
 def engineStart(target):
-    #target = ['mainframes','servers','storage','desktops'] example of including files
+    #target = ['mainframes','servers','storage','desktops'] #example of including files
     for each in target:
         each = str(each)
         #doSelectQuery(each, 'SELECT * FROM ')  # PRINTS ALL TABLES MENTIONED IN TARGET VARIABLE
         doCreateTable(each)
-        doCreateRecords(each)
+        doCreateRecords(reConnect(),each)
+        connect.commit()
     connect.close()

@@ -24,7 +24,7 @@ def dataReader(fileName):
             x = re.sub(str(delim),"','",x)
             x = re.sub(r'\n',"'\n",x)
             x = "'"+x
-            line = line+str(x)
+            line = line+x
         return line+"'"
 
 

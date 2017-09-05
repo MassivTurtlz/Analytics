@@ -1,6 +1,6 @@
 import SQL_COMMON_HELPERS
 
 #table to create
-target = ['mainframes']
+target = ['csvtester']
 
 print(SQL_COMMON_HELPERS.engineStart(target))

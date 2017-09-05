@@ -79,12 +79,11 @@ def doCreateTable(table):
     cur.execute(query)
     connect.commit()
 
-def engineStart():
-    target = ['mainframes','servers','storage','desktops']
+def engineStart(target):
+    #target = ['mainframes','servers','storage','desktops'] example of including files
     for each in target:
         each = str(each)
         #doSelectQuery(each, 'SELECT * FROM ')  # PRINTS ALL TABLES MENTIONED IN TARGET VARIABLE
         doCreateTable(each)
         doCreateRecords(each)
     connect.close()
-engineStart()

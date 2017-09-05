@@ -12,28 +12,21 @@ def getExtension(file):
 
 def dataReader(fileName):
     ext = str(getExtension(fileName))
+    delim = ''
     if ext == 'txt':
-        with open('data/'+fileName+"."+ext) as file:
-            file = file.readlines()
-            line = ''
-            for x in file:
-                x = re.sub("[|]","','",x)
-                x = re.sub(r'\n',"'\n",x)
-                x = "'"+x
+        delim = '[|]'
+    elif ext =='csv':
+        delim = "[,]"
+    with open('data/'+fileName+"."+ext) as file:
+        file = file.readlines()
+        line = ''
+        for x in file:
+            x = re.sub(str(delim),"','",x)
+            x = re.sub(r'\n',"'\n",x)
+            x = "'"+x
+            line = line+str(x)
+        return line+"'"
 
-                line = line+str(x)
-            return line+"'"
-    if ext == 'csv':
-        with open('data/' + fileName + "." + ext) as file:
-            file = file.readlines()
-            line = ''
-            for x in file:
-                x = re.sub("[,]", "','", x)
-                x = re.sub(r'\n', "'\n", x)
-                x = "'" + x
-
-                line = line + str(x)
-            return line + "'"
 
 def dataReaderCSV(fileName):
     data = dataReader(fileName)

@@ -44,7 +44,7 @@ def doProcessColumnsNames(table):
 def QueryBuilder(x,table):
     hash = COMMON_HELPERS.hashMaker(x)
     query = str('INSERT INTO '+table+' VALUES(' + str(hash) + "," + str(
-        x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(connect,table))
+        x) + ') ON DUPLICATE KEY UPDATE '+doProcessColumnsNames(table))
     return str(query)
 
 def doCreateRecords(table):
@@ -87,4 +87,4 @@ def engineStart():
         doCreateTable(each)
         doCreateRecords(each)
     connect.close()
-#engineStart()
+engineStart()

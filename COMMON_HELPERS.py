@@ -8,8 +8,6 @@ def getExtension(file):
     return str(path).split('.')[1].replace("'","").replace("]","")
 
 
-## TODO: HANDLE CSV FILE FORMAT -- needs testing
-
 def dataReader(fileName):
     ext = str(getExtension(fileName))
     delim = ''
@@ -32,6 +30,7 @@ def dataReaderCSV(fileName):
     data = dataReader(fileName)
     data = str(str(data).replace('(', '').replace(')', '').replace("'", ''))
     return data
+
 
 def hashMaker(x):
     y = str(x.split(',')[0] + x.split(',')[3]).replace("'","")

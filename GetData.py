@@ -4,6 +4,7 @@ import COMMON_HELPERS
 
 connect = SQL_COMMON_HELPERS.connect
 
+# test that the server works
 
 def exampleQuery():
     query = "SELECT * FROM mainframes;"

@@ -2,13 +2,14 @@ import SQL_COMMON_HELPERS
 import COMMON_HELPERS
 
 
+
 connect = SQL_COMMON_HELPERS.connect
 
 # test that the server works
 
-def exampleQuery():
-    query = "SELECT * FROM mainframes;"
-    queryResults = SQL_COMMON_HELPERS.doSelectQuery('mainframes', query)
+def exampleQuery(target):
+    query = "SELECT * FROM "+target[0]+";"
+    queryResults = SQL_COMMON_HELPERS.doSelectQuery(target[0], query)
 
     for each in queryResults:
         print(each)
@@ -36,4 +37,4 @@ def getLeastStrategicImportance(table):
 def runThese():
     print(getMostStrategicImportance('mainframes'))
     print(getLeastStrategicImportance('mainframes'))
-runThese()
+#runThese()

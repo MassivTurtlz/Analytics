@@ -2,7 +2,9 @@ import SQL_COMMON_HELPERS
 import GetData
 
 #table to create
-target = ['csvtester']
+target = ['mainframes']
 
+
+print()
 print(SQL_COMMON_HELPERS.engineStart(target))
-print(GetData.exampleQuery())
+print(GetData.exampleQuery(target))
